@@ -10,8 +10,8 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-
 	"github.com/Ashank007/students-api-go/internal/config"
+	"github.com/Ashank007/students-api-go/internal/http/handlers/student"
 )
 
 func main(){
@@ -20,11 +20,7 @@ func main(){
 
 	router := http.NewServeMux()
 
-	router.HandleFunc("GET /",func(w http.ResponseWriter, r *http.Request) {
-
-		w.Write([]byte("Welcome to Students Api"))
-  
-	})
+	router.HandleFunc("POST /api/students",student.New())
 
 	server := http.Server {
    Addr: cfg.HTTPServer.Address,
