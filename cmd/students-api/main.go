@@ -12,15 +12,24 @@ import (
 	"time"
 	"github.com/Ashank007/students-api-go/internal/config"
 	"github.com/Ashank007/students-api-go/internal/http/handlers/student"
+	"github.com/Ashank007/students-api-go/internal/storage/sqlite"
 )
 
 func main(){
 
 	cfg := config.MustLoad()
+	
+	storage,err := sqlite.New(cfg)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	slog.Info("Storage Initialized",slog.String("env",cfg.Env),slog.String("version","1.0.0"))
 
 	router := http.NewServeMux()
 
-	router.HandleFunc("POST /api/students",student.New())
+	router.HandleFunc("POST /api/students",student.New(storage))
 
 	server := http.Server {
    Addr: cfg.HTTPServer.Address,
